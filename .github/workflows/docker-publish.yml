@@ -31,8 +31,7 @@ jobs:
       id-token: write
 
     outputs:
-      imageid: ${{ steps.build-and-push.outputs.imageid }}
-      digest: ${{ steps.build-and-push.outputs.digest }}
+      image_name: ${{ steps.get-build-name.outputs.image_name }}
 
     steps:
       - name: Checkout repository
@@ -97,6 +96,11 @@ jobs:
         # This step uses the identity token to provision an ephemeral certificate
         # against the sigstore community Fulcio instance.
         run: echo "${TAGS}" | xargs -I {} cosign sign --yes {}@${DIGEST}
+      
+      - id: get-build-name
+        run: |
+          imageName=${{ fromJSON(steps.build-and-push.outputs.metadata)['image.name'] }}
+          echo "::set-output name=image_name::$imageName"
   deploy:
     runs-on: ubuntu-latest
 
