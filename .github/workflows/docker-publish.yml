@@ -31,7 +31,7 @@ jobs:
       id-token: write
 
     outputs:
-      image_name: ${{ steps.build-and-push.outputs.image_name }}
+      imageid: ${{ steps.build-and-push.outputs.imageid }}
       digest: ${{ steps.build-and-push.outputs.digest }}
 
     steps:
@@ -117,5 +117,5 @@ jobs:
           script: |
             # Pull and run the Docker container on the instance
             docker stop ec2-test
-            docker pull ${{ needs.build.outputs.image_name }}:${{ needs.build.outputs.digest }}
-            docker run -d --rm --name ec2-test -p 80:80 ${{ needs.build.outputs.image_name }}:${{ needs.build.outputs.digest }}
+            docker pull ${{ needs.build.outputs.imageid }}:${{ needs.build.outputs.digest }}
+            docker run -d --rm --name ec2-test -p 80:80 ${{ needs.build.outputs.imageid }}:${{ needs.build.outputs.digest }}
