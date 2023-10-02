@@ -30,6 +30,10 @@ jobs:
       # with sigstore/fulcio when running outside of PRs.
       id-token: write
 
+    outputs:
+      image_name: ${{ steps.build-and-push.outputs.image_name }}
+      digest: ${{ steps.build-and-push.outputs.digest }}
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -113,5 +117,5 @@ jobs:
           script: |
             # Pull and run the Docker container on the instance
             docker stop ec2-test
-            docker pull ${{ needs.build.outputs.image_name }}:${{ needs.build.outputs.tags }}
-            docker run -d --rm --name ec2-test -p 80:80 ${{ needs.build.outputs.image_name }}:${{ needs.build.outputs.tags }}
+            docker pull ${{ needs.build.outputs.image_name }}:${{ needs.build.outputs.digest }}
+            docker run -d --rm --name ec2-test -p 80:80 ${{ needs.build.outputs.image_name }}:${{ needs.build.outputs.digest }}
