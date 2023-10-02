@@ -113,5 +113,5 @@ jobs:
           script: |
             # Pull and run the Docker container on the instance
             docker stop ec2-test
-            docker pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.meta.outputs.tags }}
-            docker run -d --rm --name ec2-test -p 80:80 ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.meta.outputs.tags }}
+            docker pull ${{ needs.build.outputs.image_name }}:${{ needs.build.outputs.tags }}
+            docker run -d --rm --name ec2-test -p 80:80 ${{ needs.build.outputs.image_name }}:${{ needs.build.outputs.tags }}
